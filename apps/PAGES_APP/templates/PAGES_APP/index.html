@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Dojo Friends</title>
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'PAGES_APP/css/style.css' %}"> 
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    </head>
+    <body>
+        <div class="container">
+            <div class="rows">
+                <div class="jumbotron text-center">
+                   <h1>Success! Welcome,  to Dojo Friends</h1>
+                </div><!--JUMBOTRON-->
+                <form action="/wall/message/process" method="POST"> <!--USER QUERY FORM-->
+                    {% csrf_token %}
+                    <table class="table">
+                        <tr>
+                            <td>
+                                Find a user <input type="text" name="userQuery" class="form-control input-lg" placeholder="Write their First Name Here!">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td >
+                                <input type="submit" name="search" value="Search">
+                            </td>
+                        </tr>
+                    </table>
+                </form> <!--END USER QUERY FORM-->
+                {% for user in Users reversed %} <!--USERS TABLE-->
+                    <table class="table" class="messageTable">
+                        <tr>
+                            <th class="messageTableHead">
+                                
+                                {{user.username}}
+                                {{message.created_at}}
+                            </th>
+                        </tr>
+                        <br>
+                        <tr>
+                            <td class="messageTableData">
+                                {{user.fname}} {{user.lname}} 
+                                <br>
+                                <a href="/pages/{{thisUsersPage}}" style="color: green">Go to this users page</a>
+
+                            </td>
+                        </tr>
+                    {% endfor %} <!--END USERS TABLE-->
+                </table>
+
+            </div><!--ROWS-->
+            <a href="/">GO TO LOGIN PAGE</a> <br>
+            <a href="/logout">Logout</a>
+
+
+
+        </div><!--CONTAINER-->
+        
+    </body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Dojo WALL</title>
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'PAGES_APP/css/style.css' %}"> 
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    </head>
+    <body>
+        <div class="container">
+            <div class="rows">
+                <div class="jumbotron text-center">
+                   <h1>Success! Welcome,  to the Dojo Wall</h1>
+                </div><!--JUMBOTRON-->
+                <form action="/wall/message/process" method="POST"> <!--MESSAGE FORM-->
+                    {% csrf_token %}
+                    <table class="table">
+                        <tr>
+                            <td>
+                                Post a message<input type="text" name="newContent" class="form-control input-lg" placeholder="Write a message here!">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td >
+                                <input type="submit" name="postmessage" value="Post Message">
+                            </td>
+                        </tr>
+                    </table>
+                </form> <!--END MESSAGE FORM-->
+                {% for message in Messages reversed %} <!--MESSAGE TABLE-->
+                    <table class="table" class="messageTable">
+                        <tr>
+                            <th class="messageTableHead">
+                                {{message.creator.fname}}
+                                {{message.creator.lname}}
+                                {{message.created_at}}
+                            </th>
+                        </tr>
+                        <br>
+                        <tr>
+                            <td class="messageTableData">
+                                {{message.content}} 
+                                {% if liveUser == message.creator.id %}
+                                    <form action="/wall/deletion/process/message" method="POST" >
+                                        {% csrf_token %}
+                                        <input type="hidden" value="{{message.id}}">
+                                        <input type="submit" value="deleteMessage" style="color: red">
+                                    </form>
+                                {% endif %}
+                            </td>
+                        </tr>
+                            <table class="commentsTable"><!--COMMENTS TABLE-->
+                                {% for comment in message.message_comments.all %}
+                                        <tr> 
+                                            <th class="commentsTableHead">
+                                                {{comment.creator.fname}}
+                                                {{comment.creator.lname}}
+                                                {{comment.created_at}}
+                                            </th>
+                                        </tr>
+                                        
+                                        <tr class="info">
+                                            <td class="commentsTableData">{{comment.content}}</td>
+                                        </tr> 
+                                        
+                                        {% endfor %}
+                                    </table> <!--END COMMENTS TABLE-->
+                                <tr>
+                                    <form action="/wall/comment/process" method="POST"> <!--COMMENT FORM-->
+                                        {% csrf_token %}
+                                        <table class="table" >
+                                            <tr>
+                                                <td>
+                                                    Post a comment<input type="text" name="newContent" class="form-control input-lg" placeholder="Write a comment here!">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <input type="hidden" name="parentID" value='{{message.id}}'>
+                                                    <input type="submit" name="postcomment" value="Post Comment">
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </form> <!--END COMMENT FORM-->
+                                </tr>
+                    {% endfor %} <!--END MESSAGE TABLE-->
+                </table>
+
+            </div><!--ROWS-->
+            <a href="/">GO TO LOGIN PAGE</a> <br>
+            <a href="/logout">Logout</a>
+
+
+
+        </div><!--CONTAINER-->
+        
+    </body>
+</html>

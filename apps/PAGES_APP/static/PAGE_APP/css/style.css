@@ -1,0 +1,30 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+.messageTable{
+    text-align: left;
+}
+.messageTableHead{
+    color: black;
+    font-weight: 700;
+}
+.messageTableData{
+    color: blue;
+    font-weight: 600;
+}
+
+.commentsTable{
+    text-align: left;
+    margin-left: 50px;
+}
+
+.commentsTableHead{
+    color: black;
+    font-weight: 700;    
+}
+.commentsTableData{
+    color: blue;
+    font-weight: 600;
+}
